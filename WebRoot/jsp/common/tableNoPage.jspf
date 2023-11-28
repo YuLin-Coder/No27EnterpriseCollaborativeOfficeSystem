@@ -1,0 +1,36 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div style="width:100%;max-height: 80%;overflow: auto;">
+    <table class="table table-hover table-striped" style="table-layout: fixed;">
+        <thead style="/*position: fixed;*/">
+        <th style="width: 2em"></th>
+        <th ng-repeat="th in ths" width="{{th.width}}">
+            <span ng-bind="th.name"></span>
+        </th>
+        <th ng-if="operations && operations.length>0" width="{{operations.length*6 + '%'}}" class="disabled">操作</th>
+        </thead>
+
+        <tbody ng-drop="true" ng-drop-success="tableDragService.onDropComplete(this, $data,$event)">
+        <tr style="background-color: white;" ng-show="list.length == 0">
+            <td colspan="{{ths.length}}+1"><h3 class="text-center text-muted">没有相应记录...</h3></td>
+        </tr>
+        <tr ng-drag="true" ng-drag-data="row"
+            ng-drag-success="tableDragService.onDragComplete($data,$event)"
+            ng-repeat="row in list">
+            <td ng-drag-handle style="cursor: move"><span class="icon-move"></span></td>
+            <td class="single-line" ng-repeat="th in ths" width="{{th.width}}">
+                <a ng-if="th.link" ng-href="{{th.link(row)}}" target="_blank" ng-bind="th.value(row)"></a>
+                <img ng-if="th.img" class="img-{{th.clas}} img-responsive" ng-src="{{th.img(row)}}"
+                     style="height: 22px;"></a>
+                <button ng-if="th.btn" class="btn btn-{{th.btn(row).clas}} btn-xs"><span
+                        ng-bind="th.btn(row).value"></span>&nbsp;</button>
+                <span ng-if="!th.link && !th.img && !th.btn" title="{{th.title(row)}}" ng-bind="th.value(row)"
+                      ng-style='th.style(row)'></span>
+            </td>
+            <td ng-if="operations && operations.length>0">
+                <button class="m-r" ng-repeat="op in operations" ng-class='op.clas(row)' ng-click="op.click(row)"
+                        ng-bind='op.name(row)'></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--
+Author: JusterDu
+Unit: Lab1810
+Date: 2018-03-08 15:00
+-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>title</title>
+    <!--基础css & js-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/validate.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.5.0/angular.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular-file-upload/2.5.0/angular-file-upload.min.js"></script>
+    <script src="/jsp/common/template/baseModule.js"></script>
+    <!--七牛云存储-->
+    <script src="/jsp/qiniu/js/plupload.full.min.js"></script>
+    <script src="/jsp/common/js/qiniu.min.js"></script>
+    <script src="/jsp/qiniu/js/qiniu.my.js"></script>
+    <!--日期处理-->
+    <link href="/jsp/common/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="/jsp/common/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/jsp/common/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="/jsp/common/js/moment.min.js"></script>
+</head>
+<body ng-app="m" ng-controller="c" style="padding-top: 50px;">
+<script>
+    angular.module("m", ["baseModule", "qiniu"])
+            .controller("c", function ($scope, entity, ajax, uploader) {
+                /**获取七牛云文件上传组件实例*/
+                $scope.qnNgObj = {};
+                $scope.qnNgObj.status = {
+                    firstPick: true, againPick: false, upSuccess: false,
+                    changeStatus: function (f, a, u) {
+                        $scope.$apply(function () {
+                            $scope.qnNgObj.status.firstPick = f;
+                            $scope.qnNgObj.status.againPick = a;
+                            $scope.qnNgObj.status.upSuccess = u;
+                        });
+                    }
+                };
+                $scope.qnUp = uploader.getUploader($scope, function (resultFile) {
+                    $scope.qnFile = resultFile;//文件上传成功后保存在angularjs的作用域中
+                    console.log("文件外链: " + $scope.qnFile);
+                });
+
+                /* var g2 = uploader.getUploader(function () {
+                 //console.log("aha111");
+                 },2);
+                 console.log(g2);*/
+
+                $scope.entity = entity.getEntity(
+                        {
+                            password: "",
+                            name: "",
+                            tel: "",
+                            email: "",
+                            description: "",
+                            img: ""
+                        }, {
+                            //password: {},
+                            name: {},
+                            tel: {},
+                            email: {},
+                            description: {}
+                        }, function () {
+                            console.log("opened!");
+                        }, function () {
+                            console.log("submited!");
+                        }, "modal", null);
+                $scope.entity1 = {
+                    password: "1",
+                    name: "2",
+                    tel: "3",
+                    email: "4",
+                    description: "5",
+                    img: "http://ouq6u283u.bkt.clouddn.com/17-10-24-18:47springfirst.jpg",
+                    openView: function () {
+                        $("#modal1").modal("show");
+                    }
+                };
+                /*ajax.ajax("http://localhost:8080/server/customer/getCustomer","POST",{
+                 userId: 1,
+                 customerId: 1093
+                 }).success(function (data) {
+                 console.log(data);
+                 });*/
+                /**日期处理初始化*/
+                (function () {
+                    $('#datetimepicker').datetimepicker({
+                        format: 'yyyy-mm-dd',//yyyy-mm-dd hh:ii:ss
+                        autoclose: true,
+                        language: 'zh-CN',
+                        minView: 2 //0-hour 1-day 2-month 3-year 4 decade
+                    }).on('changeDate', function (e) {
+                        /**用法
+                         * $('#datetimepicker').val(moment($scope.entity.authDeadLine).format("YYYY-MM-DD"));//赋值
+                         * var today = moment().format("YYYY-MM-DD");//自定义变量千万不能有moment否则会覆盖//今天的日期
+                         * moment($('#datetimepicker').val()).format("YYYY-MM-DD HH:mm:ss");//结果为string类型
+                         */
+                    });
+                })();
+            });
+</script>
+
+<div entity-modal="modal" title="新增 用户" action="add" entity="entity">
+    <entity-modal-body>
+        <div entity-edit-text="password" type="password" title="密码" entity="entity.entity"></div>
+        <div entity-edit-text="name" type="text" title="姓名" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <div entity-edit-text="tel" type="tel" title="电话" entity="entity.entity" e="entity" vld="entity.validate"></div>
+        <div entity-edit-text="email" type="email" title="邮箱" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <div entity-edit-textarea="description" title="个人介绍" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <!--<div entity-edit-img="img" title="图片" entity="entity.entity"></div>-->
+    </entity-modal-body>
+</div>
+
+<div entity-modal-view="modal1" title="查看 用户" action="view" entity="entity1">
+    <entity-modal-view-body>
+        <div entity-view-tag="entity1.password" type="password" title="密码"></div>
+        <div entity-view-tag="entity1.name" type="text" title="姓名"></div>
+        <div entity-view-tag="entity1.tel" type="text" title="电话"></div>
+        <div entity-view-tag="entity1.email" type="text" title="邮箱"></div>
+        <div entity-view-tag="entity1.description" type="textarea" title="个人介绍"></div>
+        <div entity-view-tag="entity1.img" type="img" title="图片"></div>
+    </entity-modal-view-body>
+</div>
+
+<div class="form-horizontal">
+    <div entity-right-button="open add" clas="success" click="entity._openModal()"></div>
+    <div entity-right-button="open view" clas="primary" click="entity1.openView()"></div>
+    <!--<div entity-edit-img="img" name="img" title="图片" entity="entity.entity"></div>-->
+</div>
+
+<div id="container" style="width: 330px;" class="center-block">
+    <a class="btn btn-default btn-lg" id="pickfiles" style="width:160px">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span ng-show="qnNgObj.status.firstPick">选择文件</span>
+        <span ng-show="qnNgObj.status.againPick">重新选择</span>
+    </a>
+    <a class="btn btn-default btn-lg" style="width:160px"
+       ng-click="qnUp.start()" ng-show="!qnNgObj.status.upSuccess">
+        <span>确认上传</span>
+    </a>
+    <a class="btn btn-success btn-lg" style="width:160px"
+       ng-show="qnNgObj.status.upSuccess">
+        <i class="glyphicon glyphicon-ok"></i>
+        <span>上传成功</span>
+    </a>
+
+    <div style="margin-top: 20px;">
+        <img id="imgPrev" width="320px" height="230px" src="" alt="请选择文件!"/>
+    </div>
+</div>
+
+<div style="width: 350px;margin-top: 20px;" class="center-block">
+    <input type="text" value="" id="datetimepicker" class="form-control" data-date-format="yyyy-mm-dd">
+</div>
+</body>
+</html>

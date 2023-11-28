@@ -1,0 +1,28 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div class="panel-footer clearfix" ng-hide="noPage">
+    <nav class="pull-left">
+        <ul class="pagination m-y-0">
+            <li ng-class='{"disabled":!page.hasPrev}' ng-click="page.prev()"><a>上一页</a></li>
+            <li ng-repeat="p in page.pages" ng-class='{"disabled":isNaN(p), "active":p == page.current}'
+                ng-click="page.pageTo(p)"><a ng-bind="p"></a></li>
+            <li ng-class='{"disabled":!page.hasNext}' ng-click="page.next()"><a>下一页</a></li>
+        </ul>
+    </nav>
+    <form class="form-inline pull-right" ng-submit="page.refreshTo(page.jump)">
+        <div class="form-group">
+            <label>每页</label>
+            <select class="form-control" ng-model="page.size"
+                    ng-options="s as s for s in page.sizes"
+                    ng-change="page.refreshTo(1)">
+            </select>
+            <label>条&nbsp;到第</label>
+            <input style="width: 80px" type="number" class="form-control" ng-model="page.jump" min="1">
+            <label>页</label>
+            <button class="btn btn-default" type="submit">跳转</button>
+        </div>
+    </form>
+    <div ng-if="page.count != null" class="text-center m-t text-info">共<strong ng-bind="page.count"
+                                                                               class="m-x"></strong>条记录
+    </div>
+
+</div>

@@ -1,0 +1,33 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<table class="table table-hover table-striped" style="table-layout: fixed;" >
+    <thead>
+    <th ng-repeat="th in ths" width="{{th.width}}" ng-click='page.orderTo(th.orderBy)' style="vertical-align: middle;text-align: center">
+        <input ng-if="th.checkbox" type="checkbox" style="cursor: pointer;" ng-click="checkboxObj.ifAllChoose($event)"
+               ng-checked="checkboxObj.ifAllChooseStatus" ng-class="th.clas()"/>
+        <span ng-bind="th.name"></span>
+        <span ng-if='th.orderBy && page.orderBy==th.orderBy' class="glyphicon"
+              ng-class='{"glyphicon-sort-by-attributes":page.asc,"glyphicon-sort-by-attributes-alt":!page.asc}'></span>
+    </th>
+    <th ng-if="operations && operations.length>0" width="{{operations.length*6 + '%'}}" class="disabled">操作</th>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in page.list">
+        <td class="" ng-repeat="th in ths" style="vertical-align: middle;text-align: center;word-break:break-all; word-wrap:break-word;">
+            <a ng-if="th.link" ng-href="{{th.link(row)}}" target="_blank" ng-bind="th.value(row)"></a>
+            <img ng-if="th.img" class="img-{{th.clas}} img-responsive" ng-src="{{th.img(row)}}" style="height: 400px;width: 400px;margin:0 auto;"
+                 ng-click="th.click(row)"></a>
+            <button ng-if="th.btn" class="btn btn-{{th.btn(row).clas}} btn-xs"><span ng-bind="th.btn(row).value"></span>&nbsp;
+            </button>
+            <span ng-if="!th.link && !th.img && !th.btn && !th.checkbox" title="{{th.title(row)}}"
+                  ng-bind="th.value(row)" ng-style='th.style(row)'></span>
+            <input type="checkbox" ng-if="th.checkbox" ng-click='th.click(row,$event)' ng-style='th.style()'
+                   ng-checked="checkboxObj.willChecked(row)">
+        </td>
+        <td ng-if="operations && operations.length>0" style="vertical-align: middle;text-align: center;word-break:break-all; word-wrap:break-word;">
+            <button class="m-r" ng-repeat="op in operations" ng-class='op.clas(row)' ng-click="op.click(row)"
+                    ng-bind='op.name(row)'></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<%@include file="page.jspf" %>

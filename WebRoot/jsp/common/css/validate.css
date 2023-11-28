@@ -1,0 +1,6 @@
+.input-error {
+    border-color: #f78d8d !important;
+    outline: 0 !important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(239, 154, 154, 1) !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(239, 154, 154, 1) !important;
+}

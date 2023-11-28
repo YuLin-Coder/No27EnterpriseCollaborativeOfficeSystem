@@ -1,0 +1,121 @@
+/*
+ * Base structure
+ */
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    padding-top: 50px;
+    min-width: 1024px;
+    padding-left: 170px;
+    font-family: "微软雅黑", "黑体", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body.nav-collapse {
+    padding-left: 56px;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+
+/*
+ * Sidebar
+ */
+.sidebar {
+  display: block;
+  width: 170px;
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  margin-top: 0;
+  z-index: 1000;
+  background-color: #404b56;
+}
+
+.sidebar.collapse {
+    /*无空格: 多类选择器*/
+    width: 56px;
+}
+
+.sidebar .nav-sidebar.nav-line {
+    border-top: solid 1px #777777;
+}
+
+.sidebar .nav-sidebar > li, /*有空格: 后代选择器*/
+.sidebar .nav-sidebar-sub > li {
+    /* > 表示子选择器不包括孙元素*/
+    position: relative;
+}
+
+.sidebar .nav-sidebar > li > .nav-tooltip,
+.sidebar .nav-sidebar-sub > li > .nav-tooltip {
+    /*侧边栏向左折叠时,鼠标滑动到每个小图标上时,向右弹出提示*/
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 140px;
+    color: white;
+    background-color: rgba(34, 40, 46, 0.8);
+    right: -146px; /*140+6=146*/
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.sidebar .nav-sidebar > li > .nav-tooltip:after,
+.sidebar .nav-sidebar-sub > li > .nav-tooltip:after {
+    /*向右弹出提示时,左边那个三角形*/
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: -6px;
+    margin-top: -6px;
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid rgba(34, 40, 46, 0.8);
+}
+
+.sidebar .nav-sidebar > li a,
+.sidebar .nav-sidebar-sub > li a {
+    padding: 10px 20px;
+    color: white;
+    white-space: nowrap;
+    text-overflow: clip; /*文本过长只是裁剪而不显示省略号,ellipsis会显示省略号*/
+    overflow: hidden;
+}
+
+.sidebar .nav-sidebar > li a:focus,
+.sidebar .nav-sidebar-sub > li a:focus {
+
+  color: white;
+  background-color: #404b56;
+}
+
+.sidebar .nav-sidebar > li a:hover,
+.sidebar .nav-sidebar-sub > li a:hover,
+.sidebar .nav-sidebar > li a.hover,
+.sidebar .nav-sidebar-sub > li a.hover {
+    color: white;
+    background-color: #37424f;
+}
+
+.sidebar .nav-sidebar > li.active > a,
+.sidebar .nav-sidebar-sub > li.active > a,
+.sidebar .nav-sidebar > li.active > a:hover,
+.sidebar .nav-sidebar-sub > li.active > a:hover,
+.sidebar .nav-sidebar > li.active > a:focus,
+.sidebar .nav-sidebar-sub > li.active > a:focus {
+  color: white;
+  background-color: #337ab7;
+}
+
+.sidebar .nav-sidebar-sub > li > a {
+    color: white;
+    background-color: #293038;
+}
+
+.sidebar .nav-sidebar-sub > li > a span:not([class^='icon-']) {
+    padding-left: 1em;
+}
